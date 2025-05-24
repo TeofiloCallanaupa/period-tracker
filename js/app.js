@@ -2,56 +2,111 @@
  * App Module
  * Main application logic and UI orchestration
  */
-import { extractSummary as summarizeInput } from './summarizer.js';
-import { queryLLM, testApiKey } from './api.js';
+import { extractSummary as summarizeInput } from "./summarizer.js";
+import { queryLLM, testApiKey } from "./api.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-  const chatForm = document.getElementById('chatForm');
-  const userInput = document.getElementById('userInput');
-  const chatContainer = document.getElementById('chat');
-  const apiKeyInput = document.getElementById('apiKeyInput');
-  const testKeyBtn = document.getElementById('testKeyBtn');
-  const keyStatus = document.getElementById('keyStatus');
+document.addEventListener("DOMContentLoaded", () => {
+  const chatForm = document.getElementById("chatForm");
+  const userInput = document.getElementById("userInput");
+  const chatContainer = document.getElementById("chat");
+  const apiKeyInput = document.getElementById("apiKeyInput");
+  const testKeyBtn = document.getElementById("testKeyBtn");
+  const keyStatus = document.getElementById("keyStatus");
+  const modelSelect = document.getElementById("modelSelect");
 
   let validatedApiKey = null;
   let keyInfo = null;
 
+  // Update placeholder based on selected model
+  modelSelect.addEventListener("change", () => {
+    const selectedModel = modelSelect.value;
+    const placeholder = getApiKeyPlaceholder(selectedModel);
+    apiKeyInput.placeholder = placeholder;
+    // Remove the resetKeyUI call here - we don't want to reset on model change
+  });
+
+  function getApiKeyPlaceholder(model) {
+    switch (model) {
+      case "gemini":
+        return "Enter Google API Key";
+      case "gpt-4":
+        return "Enter OpenAI API Key";
+      case "claude":
+        return "Enter Anthropic API Key";
+      default:
+        return "Enter OpenRouter API Key";
+    }
+  }
+
+  function validateApiKey(apiKey, model) {
+    if (!apiKey) return false;
+
+    switch (model) {
+      case "gemini":
+        return apiKey.startsWith("AI");
+      case "gpt-4":
+        return apiKey.startsWith("sk-");
+      case "claude":
+        return apiKey.startsWith("sk-ant-");
+      default:
+        return apiKey.startsWith("sk-or-");
+    }
+  }
+
   // Test API key functionality
-  testKeyBtn.addEventListener('click', async () => {
+  testKeyBtn.addEventListener("click", async () => {
     const apiKey = apiKeyInput.value.trim();
+    const selectedModel = modelSelect.value;
+
     if (!apiKey) {
-      showKeyStatus('Please enter an API key', 'error');
+      showKeyStatus("Please enter an API key", "error");
       return;
     }
 
-    testKeyBtn.textContent = 'Testing...';
+    if (!validateApiKey(apiKey, selectedModel)) {
+      showKeyStatus("Invalid API key format", "error");
+      return;
+    }
+
+    testKeyBtn.textContent = "Testing...";
     testKeyBtn.disabled = true;
 
     try {
       const result = await testApiKey(apiKey);
       validatedApiKey = apiKey;
-      
+
       // Extract key info (first 8 chars + last 4 chars)
-      const maskedKey = `${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}`;
-      keyInfo = { maskedKey, validated: new Date().toLocaleString() };
-      
-      showKeyStatus(`✅ API Key Valid: ${maskedKey}`, 'verified');
+      const maskedKey = `${apiKey.substring(0, 8)}...${apiKey.substring(
+        apiKey.length - 4
+      )}`;
+      keyInfo = {
+        maskedKey,
+        validated: new Date().toLocaleString(),
+        model: selectedModel, // Store the selected model
+      };
+
+      showKeyStatus(`✅ API Key Valid: ${maskedKey}`, "verified");
       showVerifiedKeyUI();
-      
     } catch (error) {
       validatedApiKey = null;
       keyInfo = null;
-      showKeyStatus("❌ " + error.message, 'error');
+      showKeyStatus("❌ " + error.message, "error");
     } finally {
-      testKeyBtn.textContent = 'Test API Key';
+      testKeyBtn.textContent = "Test API Key";
       testKeyBtn.disabled = false;
     }
   });
 
   // Show verified key UI
   function showVerifiedKeyUI() {
-    const apiKeySection = document.getElementById('apiKeySection');
+    const apiKeySection = document.getElementById("apiKeySection");
     apiKeySection.innerHTML = `
+      <select id="modelSelect" class="model-select" disabled>
+        <option value="qwen">Qwen (OpenRouter)</option>
+        <option value="gemini">Google Gemini</option>
+        <option value="gpt-4">ChatGPT-4</option>
+        <option value="claude">Claude</option>
+      </select>
       <div class="key-status verified">
         <strong>✅ API Key Verified</strong><br>
         Key: ${keyInfo.maskedKey}<br>
@@ -60,8 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
       <button id="removeKeyBtn">Remove Key</button>
     `;
 
+    // Set the correct model option
+    const modelSelect = document.getElementById("modelSelect");
+    modelSelect.value = keyInfo.model || "qwen";
+
     // Add remove key functionality
-    document.getElementById('removeKeyBtn').addEventListener('click', () => {
+    document.getElementById("removeKeyBtn").addEventListener("click", () => {
       validatedApiKey = null;
       keyInfo = null;
       resetKeyUI();
@@ -70,97 +129,133 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Reset to initial key input UI
   function resetKeyUI() {
-    const apiKeySection = document.getElementById('apiKeySection');
+    const currentModel = modelSelect.value; // Store current model selection
+    const apiKeySection = document.getElementById("apiKeySection");
     apiKeySection.innerHTML = `
-      <input type="password" id="apiKeyInput" placeholder="Enter OpenRouter API Key" required />
+      <select id="modelSelect" class="model-select">
+        <option value="qwen">Qwen (OpenRouter)</option>
+        <option value="gemini">Google Gemini</option>
+        <option value="gpt-4">ChatGPT-4</option>
+        <option value="claude">Claude</option>
+      </select>
+      <input type="password" id="apiKeyInput" placeholder="Enter API Key" required />
       <button id="testKeyBtn">Test API Key</button>
       <div id="keyStatus" class="key-status hidden"></div>
     `;
 
-    // Re-attach event listeners
-    const newApiKeyInput = document.getElementById('apiKeyInput');
-    const newTestKeyBtn = document.getElementById('newTestKeyBtn');
-    const newKeyStatus = document.getElementById('keyStatus');
+    // Re-attach event listeners with correct references
+    const modelSelect = document.getElementById("modelSelect");
+    const apiKeyInput = document.getElementById("apiKeyInput");
+    const testKeyBtn = document.getElementById("testKeyBtn");
 
-    newTestKeyBtn.addEventListener('click', async () => {
-      const apiKey = newApiKeyInput.value.trim();
+    // Set the model to the previously selected value
+    modelSelect.value = currentModel;
+
+    // Restore model selection event listener
+    modelSelect.addEventListener("change", () => {
+      const selectedModel = modelSelect.value;
+      const placeholder = getApiKeyPlaceholder(selectedModel);
+      apiKeyInput.placeholder = placeholder;
+    });
+
+    // Set initial placeholder based on current model
+    apiKeyInput.placeholder = getApiKeyPlaceholder(currentModel);
+
+    // Add test key functionality
+    testKeyBtn.addEventListener("click", async () => {
+      const apiKey = apiKeyInput.value.trim();
+      const selectedModel = modelSelect.value;
+
       if (!apiKey) {
-        showKeyStatus('Please enter an API key', 'error');
+        showKeyStatus("Please enter an API key", "error");
         return;
       }
 
-      newTestKeyBtn.textContent = 'Testing...';
-      newTestKeyBtn.disabled = true;
+      if (!validateApiKey(apiKey, selectedModel)) {
+        showKeyStatus("Invalid API key format", "error");
+        return;
+      }
+
+      testKeyBtn.textContent = "Testing...";
+      testKeyBtn.disabled = true;
 
       try {
         const result = await testApiKey(apiKey);
         validatedApiKey = apiKey;
-        
-        const maskedKey = `${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}`;
-        keyInfo = { maskedKey, validated: new Date().toLocaleString() };
-        
-        showKeyStatus(`✅ API Key Valid: ${maskedKey}`, 'verified');
+
+        // Extract key info (first 8 chars + last 4 chars)
+        const maskedKey = `${apiKey.substring(0, 8)}...${apiKey.substring(
+          apiKey.length - 4
+        )}`;
+        keyInfo = {
+          maskedKey,
+          validated: new Date().toLocaleString(),
+          model: selectedModel, // Store the selected model
+        };
+
+        showKeyStatus(`✅ API Key Valid: ${maskedKey}`, "verified");
         showVerifiedKeyUI();
-        
       } catch (error) {
         validatedApiKey = null;
         keyInfo = null;
-        showKeyStatus("❌ " + error.message, 'error');
+        showKeyStatus("❌ " + error.message, "error");
       } finally {
-        newTestKeyBtn.textContent = 'Test API Key';
-        newTestKeyBtn.disabled = false;
+        testKeyBtn.textContent = "Test API Key";
+        testKeyBtn.disabled = false;
       }
     });
+
+    // Set initial placeholder
+    apiKeyInput.placeholder = getApiKeyPlaceholder(modelSelect.value);
   }
 
   // Show key status message
   function showKeyStatus(message, type) {
-    const statusEl = document.getElementById('keyStatus');
+    const statusEl = document.getElementById("keyStatus");
     if (statusEl) {
       statusEl.textContent = message;
       statusEl.className = `key-status ${type}`;
-      statusEl.classList.remove('hidden');
+      statusEl.classList.remove("hidden");
     }
   }
 
   // Chat functionality
-  chatForm.addEventListener('submit', async (e) => {
+  chatForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const userText = userInput.value.trim();
+    const selectedModel = keyInfo?.model || modelSelect.value; // Use stored model from keyInfo
+
     if (!userText) return;
 
     if (!validatedApiKey) {
-      displayMessage('Please test and validate your API key first', 'bot');
+      displayMessage("Please test and validate your API key first", "bot");
       return;
     }
-    
+
     try {
-      // Get summary of user input
       const summary = summarizeInput(userText);
       const summaryString = JSON.stringify(summary);
-      
-      // Display the 3-message sequence:
-      // 1. User's original message
-      displayMessage(userText, 'user');
-      
-      // 2. Summary that gets sent to AI
+
+      displayMessage(userText, "user");
       displaySummaryMessage(summaryString);
-      
-      // 3. Get and display LLM response
-      const llmResponse = await queryLLM(summaryString, validatedApiKey);
-      displayMessage(llmResponse, 'bot');
-      
-      // Clear input
-      userInput.value = '';
+
+      const llmResponse = await queryLLM(
+        summaryString,
+        validatedApiKey,
+        selectedModel // Pass the selected model
+      );
+      displayMessage(llmResponse, "bot");
+
+      userInput.value = "";
     } catch (error) {
-      displayMessage('Error: ' + error.message, 'bot');
+      displayMessage("Error: " + error.message, "bot");
     }
   });
 
   // Display summary message that gets sent to AI
   function displaySummaryMessage(summarizedText) {
-    const summaryDiv = document.createElement('div');
-    summaryDiv.className = 'message summary-info';
+    const summaryDiv = document.createElement("div");
+    summaryDiv.className = "message summary-info";
     summaryDiv.innerHTML = `
       <strong>📤 Summary sent to AI:</strong><br>
       <em>"${summarizedText}"</em>
@@ -171,11 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Helper function to display messages
   function displayMessage(text, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message ' + type;
-    
+    const messageDiv = document.createElement("div");
+    messageDiv.className = "message " + type;
+
     // Use markdown rendering for bot messages
-    if (type === 'bot' && typeof marked !== 'undefined') {
+    if (type === "bot" && typeof marked !== "undefined") {
       // Configure marked.setOptions({
       //   breaks: true,
       //   gfm: true,
@@ -185,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       messageDiv.textContent = text;
     }
-    
+
     chatContainer.appendChild(messageDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }

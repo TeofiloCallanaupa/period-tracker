@@ -174,3 +174,25 @@ input[type="password"] {
 #removeKeyBtn:hover {
   background: #c82333;
 }
+
+/* Model selector dropdown */
+.model-select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background: white;
+  font-size: 0.9em;
+}
+
+.model-select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.model-select:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
