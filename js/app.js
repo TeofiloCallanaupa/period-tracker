@@ -413,6 +413,44 @@ document.addEventListener("DOMContentLoaded", () => {
       timestamp: new Date().toISOString(),
     });
 
+    // Check for period start mentions in user messages
+    if (type === "user") {
+      const periodDates = detectPeriodDates(text);
+
+      // Handle period start date
+      if (periodDates.start) {
+        const startDateStr = periodDates.start.toISOString().split("T")[0];
+        if (!dateData[startDateStr]) {
+          dateData[startDateStr] = { notes: "", chat: [] };
+        }
+        dateData[startDateStr].isPeriodStart = true;
+        dateData[startDateStr].notes =
+          (dateData[startDateStr].notes || "") +
+          "\n🌺 Period started on this date";
+
+        // Update calendar if we're on that date
+        if (dateSelector.value === startDateStr) {
+          updateDateInfo();
+        }
+      }
+
+      // Handle period end date
+      if (periodDates.end) {
+        const endDateStr = periodDates.end.toISOString().split("T")[0];
+        if (!dateData[endDateStr]) {
+          dateData[endDateStr] = { notes: "", chat: [] };
+        }
+        dateData[endDateStr].isPeriodEnd = true;
+        dateData[endDateStr].notes =
+          (dateData[endDateStr].notes || "") + "\n🌸 Period ended on this date";
+
+        // Update calendar if we're on that date
+        if (dateSelector.value === endDateStr) {
+          updateDateInfo();
+        }
+      }
+    }
+
     // Save to localStorage
     localStorage.setItem("dateData", JSON.stringify(dateData));
   }
@@ -443,30 +481,48 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateDateInfo() {
     const selectedDate = dateSelector.value;
     const data = dateData[selectedDate] || { notes: "", chat: [] };
-
-    // Create date object while preserving the timezone
     const displayDate = new Date(selectedDate + "T00:00:00");
 
     // Update the notes field
     dateNotes.value = data.notes || "";
 
-    // Update the date info display
-    dateInfo.innerHTML = `
+    // Update date info classes
+    const dateInfo = document.querySelector(".date-info");
+    dateInfo.classList.toggle("period-start", data.isPeriodStart);
+    dateInfo.classList.toggle("period-end", data.isPeriodEnd);
+
+    // Build date info HTML
+    let dateInfoHtml = `
       <p>Selected Date: ${displayDate.toLocaleDateString()}</p>
-      ${data.summary ? `<p>Summary: ${data.summary}</p>` : ""}
       ${
-        data.chat && data.chat.length > 0
-          ? `
+        data.isPeriodStart
+          ? "<p><strong>🌺 Period started on this date</strong></p>"
+          : ""
+      }
+      ${
+        data.isPeriodEnd
+          ? "<p><strong>🌸 Period ended on this date</strong></p>"
+          : ""
+      }
+      ${data.summary ? `<p>Summary: ${data.summary}</p>` : ""}
+    `;
+
+    // Add chat history if available
+    if (data.chat && data.chat.length > 0) {
+      dateInfoHtml += `
         <div class="chat-history">
           <h4>Chat History</h4>
           <div class="chat-log">${formatChatHistory(data.chat)}</div>
         </div>
-      `
-          : "<p>No chat history for this date.</p>"
-      }
-    `;
+      `;
+    } else {
+      dateInfoHtml += "<p>No chat history for this date.</p>";
+    }
 
-    // After updating chat history, ensure it starts scrolled to the top
+    // Update the display
+    dateInfo.innerHTML = dateInfoHtml;
+
+    // Scroll chat log to top
     const chatLog = document.querySelector(".chat-log");
     if (chatLog) {
       chatLog.scrollTo({ top: 0, behavior: "smooth" });
@@ -506,4 +562,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => savedNotification.remove(), 3000);
   });
+
+  // Function to detect period dates from message
+  function detectPeriodDates(message) {
+    const today = new Date();
+    message = message.toLowerCase();
+    let result = { start: null, end: null };
+
+    // Helper function to get relative date
+    function getRelativeDate(message) {
+      if (message.includes("yesterday")) {
+        return new Date(new Date().setDate(today.getDate() - 1));
+      } else if (message.includes("today")) {
+        return new Date();
+      } else if (message.includes("two days ago")) {
+        return new Date(new Date().setDate(today.getDate() - 2));
+      } else if (message.includes("three days ago")) {
+        return new Date(new Date().setDate(today.getDate() - 3));
+      }
+
+      // Try to find a specific date in the message
+      const dateMatch = message.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+      if (dateMatch) {
+        const [_, month, day, year] = dateMatch;
+        return new Date(year, month - 1, day);
+      }
+      return null;
+    }
+
+    // Check for period start
+    if (message.includes("period started")) {
+      result.start = getRelativeDate(message);
+    }
+
+    // Check for period end
+    if (
+      message.includes("period ended") ||
+      message.includes("period finished") ||
+      message.includes("period stopped")
+    ) {
+      result.end = getRelativeDate(message);
+    }
+
+    return result;
+  }
 });

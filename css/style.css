@@ -569,7 +569,7 @@ input:focus {
 }
 
 /* Add decorative elements */
-.calendar-container::before {
+/* .calendar-container::before {
   content: "🌸";
   position: absolute;
   top: -10px;
@@ -585,7 +585,7 @@ input:focus {
   right: -10px;
   font-size: 1.5rem;
   opacity: 0.8;
-}
+} */
 
 /* Improved focus states */
 *:focus {
@@ -636,3 +636,50 @@ input:focus {
 #dateNotes::placeholder {
   color: #b48e99;
 }
+
+/* Period start date styling */
+.date-info.period-start {
+  background: #ffebf3;
+  border: 2px solid #d23f6f;
+}
+
+.date-info.period-start h3 {
+  color: #d23f6f;
+  border-bottom: 2px solid #d23f6f;
+}
+
+/* .date-info.period-start::before {
+  content: "🌺";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.5rem;
+  opacity: 0.8;
+} */
+
+/* Period end date styling */
+.date-info.period-end {
+  background: #fff9fb;
+  border: 2px solid #e84b7f;
+  border-style: dashed;
+}
+
+.date-info.period-end h3 {
+  color: #e84b7f;
+  border-bottom: 2px dashed #e84b7f;
+}
+
+/* .date-info.period-end::before {
+  content: "🌸";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.5rem;
+  opacity: 0.4;
+  filter: grayscale(30%);
+} */
+
+/* Allow both start and end styling to be combined */
+/* .date-info.period-start.period-end::before {
+  content: "✨";
+} */
