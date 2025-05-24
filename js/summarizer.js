@@ -109,9 +109,8 @@ export function extractSummary(text) {
 
   return {
     period_start: periodStart,
-    symptoms:
-      symptoms,
-    mood,
+    symptoms: symptoms.length > 0 ? symptoms : ['no specific symptoms mentioned'],
+    mood
   };
 }
 

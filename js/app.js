@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
       validatedApiKey = null;
       keyInfo = null;
       showKeyStatus("❌ " + error.message, 'error');
-      displayMessage("❌ " + error.message, 'bot');
     } finally {
       testKeyBtn.textContent = 'Test API Key';
       testKeyBtn.disabled = false;
