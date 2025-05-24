@@ -1,27 +1,39 @@
 /* Base styles */
 body {
   font-family: Arial, sans-serif;
-  max-width: 600px;
+  max-width: 800px;
   margin: 2rem auto;
   background: #f9f9f9;
   padding: 1rem;
 }
 
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Chat container */
 .chat {
-  border: 1px solid #ccc;
+  border: 1px solid #eee;
   padding: 1rem;
   margin-top: 1rem;
-  background: white;
+  background: #f5f5f5;
   min-height: 300px;
+  max-height: 500px;
   overflow-y: auto;
+  border-radius: 8px;
 }
 
 /* Message styling */
 .message {
+  max-width: 80%;
   margin: 0.5rem 0;
-  padding: 0.5rem;
-  border-radius: 5px;
+  padding: 0.8rem 1rem;
+  border-radius: 15px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+  clear: both;
 }
 
 .user {
@@ -32,26 +44,127 @@ body {
   background: #fff3cd;
 }
 
-/* Markdown styling for bot messages */
-.bot ul {
+/* User messages */
+.message.user {
+  background: #4a90e2;
+  color: white;
+  float: right;
+  border-bottom-right-radius: 5px;
+  margin-left: 20%;
+}
+
+/* Bot messages */
+.message.bot {
+  background: white;
+  color: #333;
+  float: left;
+  border-bottom-left-radius: 5px;
+  margin-right: 20%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Bot message markdown styling */
+.message.bot ul {
   margin: 0.5rem 0;
   padding-left: 1.5rem;
 }
 
-.bot li {
+.message.bot li {
   margin: 0.25rem 0;
 }
 
-.bot strong {
+.message.bot strong {
   font-weight: bold;
 }
 
-.bot em {
+.message.bot em {
   font-style: italic;
 }
 
-.bot p {
+.message.bot p {
   margin: 0.5rem 0;
+}
+
+/* Summary message styling */
+.message.summary-info {
+  background: #f8f9fa;
+  border: 1px dashed #dee2e6;
+  color: #6c757d;
+  float: none;
+  margin: 2rem auto 1rem auto;
+  font-size: 0.9em;
+  clear: both;
+  max-width: 90%;
+  border-radius: 8px;
+  position: relative;
+  margin-top: 2.5rem;
+}
+
+/* Chat form styling */
+#chatForm {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+#userInput {
+  flex: 1;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+#userInput:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+#chatForm button {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+#chatForm button:hover {
+  background: #357abd;
+}
+
+/* Time stamps for messages */
+.message {
+  margin-bottom: 25px; /* Add space for timestamp */
+}
+
+.message::after {
+  content: attr(data-time);
+  position: absolute;
+  bottom: -20px;
+  font-size: 0.75rem;
+  color: #666;
+  z-index: 1; /* Ensure timestamp is above other elements */
+}
+
+.message.user::after {
+  right: 5px;
+}
+
+.message.bot::after {
+  left: 5px;
+}
+
+/* Clear float after each message group */
+.message + .message.summary-info {
+  margin-top: 35px; /* Extra space after user message before summary */
 }
 
 /* Privacy info styling */
@@ -195,4 +308,244 @@ input[type="password"] {
   background-color: #f5f5f5;
   cursor: not-allowed;
   opacity: 0.7;
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  background: #f0f0f0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.tab-button.active {
+  background: #fff;
+  border-bottom: 2px solid #4a90e2;
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+/* Calendar Components */
+.calendar-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.date-selector {
+  margin-bottom: 1.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.date-selector input[type="date"] {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 1rem;
+  background: white;
+  color: #333;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.date-selector input[type="date"]:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.date-info {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.date-info h3 {
+  color: #333;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #4a90e2;
+  padding-bottom: 0.5rem;
+}
+
+.info-content {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  min-height: 100px;
+  border: 1px solid #eee;
+}
+
+/* Chat History Display in Calendar */
+.chat-history {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chat-history h4 {
+  color: #333;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #4a90e2;
+  font-size: 1.1em;
+}
+
+.chat-log {
+  height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 1rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  font-size: 0.95em;
+  line-height: 1.5;
+  white-space: normal;
+}
+
+/* Make message styling work in both chat and history */
+.chat-log .message {
+  max-width: 80%;
+  margin: 1rem 0;
+  padding: 0.8rem 1rem;
+  border-radius: 15px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+  clear: both;
+}
+
+.chat-log .message.user {
+  background: #4a90e2;
+  color: white;
+  float: right;
+  border-bottom-right-radius: 5px;
+  margin-left: 20%;
+}
+
+.chat-log .message.bot {
+  background: white;
+  color: #333;
+  float: left;
+  border-bottom-left-radius: 5px;
+  margin-right: 20%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.chat-log .message::after {
+  content: attr(data-time);
+  position: absolute;
+  bottom: -20px;
+  font-size: 0.75rem;
+  color: #666;
+  z-index: 1;
+}
+
+.chat-log .message.user::after {
+  right: 5px;
+}
+
+.chat-log .message.bot::after {
+  left: 5px;
+}
+
+.chat-log .message.summary-info {
+  background: #f8f9fa;
+  border: 1px dashed #dee2e6;
+  color: #6c757d;
+  float: none;
+  margin: 2rem auto 1rem auto;
+  font-size: 0.9em;
+  clear: both;
+  max-width: 90%;
+  border-radius: 8px;
+}
+
+/* Fix spacing after messages */
+.chat-log .message {
+  margin-bottom: 25px;
+}
+
+/* Clear floats */
+.chat-log::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Notification styling */
+.notification {
+  background: #4caf50;
+  color: white;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  text-align: center;
+  animation: fadeOut 3s forwards;
+  position: relative;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.chat-log::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-log::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.chat-log::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.chat-log::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+#dateNotes {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  height: 100px;
+  margin: 1rem 0;
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+  resize: none;
+  box-sizing: border-box;
 }

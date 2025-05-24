@@ -12,17 +12,44 @@
     <h1>🔒 Private Cycle Coach</h1>
     <div class="private-mode">Private Mode: ON</div>
 
-    <div class="chat" id="chat"></div>
+    <div class="tab-navigation">
+      <button class="tab-button active" data-tab="chat">Chat</button>
+      <button class="tab-button" data-tab="calendar">Calendar</button>
+    </div>
 
-    <form id="chatForm">
-      <input
-        type="text"
-        id="userInput"
-        placeholder="Type your message..."
-        required
-      />
-      <button type="submit">Send</button>
-    </form>
+    <div class="tab-content">
+      <div id="chat-tab" class="tab-pane active">
+        <div class="chat" id="chat"></div>
+
+        <form id="chatForm">
+          <input
+            type="text"
+            id="userInput"
+            placeholder="Type your message..."
+            required
+          />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+
+      <div id="calendar-tab" class="tab-pane">
+        <div class="calendar-container">
+          <div class="date-selector">
+            <input type="date" id="dateSelector" />
+          </div>
+          <div class="date-info">
+            <h3>Date Information</h3>
+            <div id="dateInfo" class="info-content"></div>
+            <textarea
+              id="dateNotes"
+              placeholder="Add notes for this date..."
+              rows="4"
+            ></textarea>
+            <button id="saveNotes">Save Notes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="file-input">
       <button id="downloadBtn">Download My Data (.qcycle)</button>
