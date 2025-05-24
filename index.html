@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Private Cycle Coach</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
+</head>
+<body>
+  <h1>🔒 Private Cycle Coach</h1>
+  <div class="private-mode">Private Mode: ON</div>
+  
+  <div class="chat" id="chat"></div>
+
+  <form id="chatForm">
+    <input type="text" id="userInput" placeholder="Type your message..." required />
+    <button type="submit">Send</button>
+  </form>
+
+  <div class="file-input">
+    <button id="downloadBtn">Download My Data (.qcycle)</button>
+    <button id="uploadBtn">Upload My Data</button>
+    
+    <div id="apiKeySection">
+      <input type="password" id="apiKeyInput" placeholder="Enter OpenRouter API Key" required />
+      <button id="testKeyBtn">Test API Key</button>
+      <div id="keyStatus" class="key-status hidden"></div>
+    </div>
+  </div>
+
+  <script src="js/summarizer.js" type="module"></script>
+  <!-- <script src="js/crypto.js" type="module"></script> -->
+  <script src="js/api.js" type="module"></script>
+  <script src="js/app.js" type="module"></script>
+</body>
+</html>
