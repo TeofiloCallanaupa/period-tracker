@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatContainer = document.getElementById("chat");
   const apiKeyInput = document.getElementById("apiKeyInput");
   const testKeyBtn = document.getElementById("testKeyBtn");
+  const removeKeyBtn = document.getElementById("removeKeyBtn");
   const keyStatus = document.getElementById("keyStatus");
   const modelSelect = document.getElementById("modelSelect");
   const tabButtons = document.querySelectorAll(".tab-button");
@@ -232,7 +233,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Reset to initial key input UI
   function resetKeyUI() {
-    const currentModel = modelSelect.value; // Store current model selection
+    // Store current model selection before resetting
+    let currentModel = "qwen"; // Default value
+    try {
+      currentModel = modelSelect.value;
+    } catch (e) {
+      // If modelSelect doesn't exist, use default
+      console.log("Using default model: qwen");
+    }
+
     const apiKeySection = document.getElementById("apiKeySection");
     apiKeySection.innerHTML = `
       <select id="modelSelect" class="model-select">

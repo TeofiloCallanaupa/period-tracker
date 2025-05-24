@@ -1,10 +1,21 @@
 /* Base styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
   max-width: 800px;
   margin: 2rem auto;
-  background: #f9f9f9;
+  background: #fff5f7;
   padding: 1rem;
+  color: #2c1810;
+}
+
+/* Typography */
+h1 {
+  color: #d23f6f;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
 /* Smooth scroll behavior */
@@ -14,14 +25,15 @@ html {
 
 /* Chat container */
 .chat {
-  border: 1px solid #eee;
-  padding: 1rem;
-  margin-top: 1rem;
-  background: #f5f5f5;
+  border: 2px solid #ffe4ef;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  background: white;
   min-height: 300px;
   max-height: 500px;
   overflow-y: auto;
-  border-radius: 8px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(210, 63, 111, 0.1);
 }
 
 /* Message styling */
@@ -29,38 +41,41 @@ html {
   max-width: 80%;
   margin: 0.5rem 0;
   padding: 0.8rem 1rem;
-  border-radius: 15px;
+  border-radius: 18px;
   line-height: 1.4;
   word-wrap: break-word;
   position: relative;
   clear: both;
+  font-size: 0.95rem;
 }
 
 .user {
-  background: #e0f7fa;
+  background: #fce7f0;
 }
 
 .bot {
-  background: #fff3cd;
+  background: #fff3f7;
 }
 
 /* User messages */
 .message.user {
-  background: #4a90e2;
+  background: #d23f6f;
   color: white;
   float: right;
-  border-bottom-right-radius: 5px;
+  border-bottom-right-radius: 4px;
   margin-left: 20%;
+  box-shadow: 0 2px 4px rgba(210, 63, 111, 0.2);
 }
 
 /* Bot messages */
 .message.bot {
   background: white;
-  color: #333;
+  color: #2c1810;
   float: left;
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 4px;
   margin-right: 20%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ffe4ef;
 }
 
 /* Bot message markdown styling */
@@ -205,103 +220,115 @@ html {
 
 /* Privacy indicator */
 .private-mode {
-  color: green;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  color: #d23f6f;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(210, 63, 111, 0.1);
+  display: inline-block;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Button styles */
 button {
   margin: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.2rem;
+  background: #d23f6f;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(210, 63, 111, 0.2);
+}
+
+button:hover {
+  background: #e84b7f;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(210, 63, 111, 0.3);
 }
 
 /* Input fields */
 input[type="text"],
-input[type="password"] {
-  width: 70%;
-  padding: 0.5rem;
+input[type="password"],
+input[type="date"] {
+  width: 100%;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid #ffe4ef;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  background: white;
+  color: #2c1810;
+  transition: all 0.2s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: #d23f6f;
+  box-shadow: 0 0 0 3px rgba(210, 63, 111, 0.1);
 }
 
 /* File input container */
 .file-input {
   margin-top: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 /* API Key Section */
 #apiKeySection {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background: #f8f9fa;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 2px solid #ffe4ef;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(210, 63, 111, 0.1);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
-.key-status {
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 3px;
-  font-size: 0.9em;
-}
-
-.key-status.success {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.key-status.error {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-.key-status.verified {
-  background: #d1ecf1;
-  color: #0c5460;
-  border: 1px solid #bee5eb;
-}
-
-.hidden {
-  display: none;
-}
-
-#testKeyBtn {
-  background: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-#testKeyBtn:hover {
-  background: #0056b3;
-}
-
-#removeKeyBtn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-#removeKeyBtn:hover {
-  background: #c82333;
+#apiKeySection input[type="password"] {
+  width: 300px;
+  max-width: 90%;
+  display: block;
+  margin: 0 auto;
 }
 
 /* Model selector dropdown */
 .model-select {
-  width: 100%;
-  padding: 0.5rem;
+  width: 50%;
+  padding: 0.8rem 2.5rem 0.8rem 1.2rem;
   margin-bottom: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 3px;
-  background: white;
-  font-size: 0.9em;
+  border: 2px solid #ffe4ef;
+  border-radius: 25px;
+  background: white
+    url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d23f6f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>")
+    no-repeat;
+  background-position: calc(100% - 12px) center;
+  font-size: 0.95rem;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
 }
 
 .model-select:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: #d23f6f;
+  box-shadow: 0 0 0 3px rgba(210, 63, 111, 0.1);
 }
 
 .model-select:disabled {
@@ -314,21 +341,32 @@ input[type="password"] {
 .tab-navigation {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 2px 8px rgba(210, 63, 111, 0.1);
 }
 
 .tab-button {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccc;
-  background: #f0f0f0;
-  border-radius: 4px;
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  background: transparent;
+  border-radius: 25px;
+  color: #2c1810;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  text-align: center;
+  margin: 0;
+  box-shadow: none;
 }
 
 .tab-button.active {
-  background: #fff;
-  border-bottom: 2px solid #4a90e2;
+  background: #d23f6f;
+  color: white;
+  box-shadow: 0 2px 4px rgba(210, 63, 111, 0.2);
 }
 
 .tab-pane {
@@ -342,28 +380,31 @@ input[type="password"] {
 /* Calendar Components */
 .calendar-container {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  margin-top: 1rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(210, 63, 111, 0.1);
+  padding: 2rem;
+  margin-top: 1.5rem;
+  border: 2px solid #ffe4ef;
 }
 
 .date-selector {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   display: flex;
   gap: 0.5rem;
+  position: relative;
 }
 
 .date-selector input[type="date"] {
   width: 100%;
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 20px;
+  padding: 1rem 1.5rem;
+  border: 2px solid #ffe4ef;
+  border-radius: 30px;
   font-size: 1rem;
   background: white;
-  color: #333;
+  color: #2c1810;
   transition: all 0.2s ease;
   box-sizing: border-box;
+  cursor: pointer;
 }
 
 .date-selector input[type="date"]:focus {
@@ -373,26 +414,29 @@ input[type="password"] {
 }
 
 .date-info {
-  background: #f8f9fa;
-  border-radius: 8px;
+  background: #fff9fb;
+  border-radius: 16px;
   padding: 1.5rem;
+  border: 2px solid #ffe4ef;
 }
 
 .date-info h3 {
-  color: #333;
-  margin: 0 0 1rem 0;
-  font-size: 1.2rem;
-  border-bottom: 2px solid #4a90e2;
-  padding-bottom: 0.5rem;
+  color: #d23f6f;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.3rem;
+  border-bottom: 2px solid #ffc6dc;
+  padding-bottom: 0.8rem;
+  font-weight: 600;
 }
 
 .info-content {
   background: white;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   min-height: 100px;
-  border: 1px solid #eee;
+  border: 2px solid #ffe4ef;
+  box-shadow: 0 2px 8px rgba(210, 63, 111, 0.05);
 }
 
 /* Chat History Display in Calendar */
@@ -496,26 +540,57 @@ input[type="password"] {
 
 /* Notification styling */
 .notification {
-  background: #4caf50;
-  color: white;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  margin: 1rem 0;
+  background: #fce7f0;
+  color: #d23f6f;
+  padding: 1rem 1.5rem;
+  border-radius: 30px;
+  margin: 1.5rem 0;
   text-align: center;
   animation: fadeOut 3s forwards;
   position: relative;
+  border: 2px solid #ffc6dc;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(210, 63, 111, 0.1);
 }
 
 @keyframes fadeOut {
   0% {
     opacity: 1;
+    transform: translateY(0);
   }
   70% {
     opacity: 1;
+    transform: translateY(0);
   }
   100% {
     opacity: 0;
+    transform: translateY(-10px);
   }
+}
+
+/* Add decorative elements */
+.calendar-container::before {
+  content: "🌸";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  font-size: 1.5rem;
+  opacity: 0.8;
+}
+
+.chat::before {
+  content: "💗";
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 1.5rem;
+  opacity: 0.8;
+}
+
+/* Improved focus states */
+*:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(210, 63, 111, 0.2);
 }
 
 .chat-log::-webkit-scrollbar {
@@ -537,15 +612,27 @@ input[type="password"] {
 
 #dateNotes {
   width: 100%;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 1.2rem;
+  border: 2px solid #ffe4ef;
+  border-radius: 16px;
   font-size: 1rem;
-  height: 100px;
-  margin: 1rem 0;
+  height: 120px;
+  margin: 1.5rem 0;
   font-family: inherit;
-  line-height: 1.5;
-  transition: border-color 0.2s;
+  line-height: 1.6;
+  transition: all 0.2s ease;
   resize: none;
   box-sizing: border-box;
+  background: white;
+  color: #2c1810;
+}
+
+#dateNotes:focus {
+  outline: none;
+  border-color: #d23f6f;
+  box-shadow: 0 0 0 3px rgba(210, 63, 111, 0.1);
+}
+
+#dateNotes::placeholder {
+  color: #b48e99;
 }
