@@ -6,7 +6,7 @@ A privacy-first period tracking chatbot that uses Qwen 3 via Cerebras/OpenRouter
 
 https://period-tracker-bl6bq9j2a-teos-projects-616fcc46.vercel.app/
 
-#Youtube
+# Youtube
 
 https://youtu.be/bXieHki3dvU
 
