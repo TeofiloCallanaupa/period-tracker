@@ -2,6 +2,14 @@
 
 A privacy-first period tracking chatbot that uses Qwen 3 via Cerebras/OpenRouter to provide empathetic responses without sending sensitive data directly.
 
+# Deployed At
+
+https://period-tracker-bl6bq9j2a-teos-projects-616fcc46.vercel.app/
+
+#Youtube
+
+https://youtu.be/bXieHki3dvU
+
 ## Features
 
 - **Local Text Summarization**: Extracts JSON summaries from user input client-side
